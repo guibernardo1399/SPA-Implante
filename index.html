@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SPA Implante – Clínicas Odontológicas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #2d9e47;
+      --green-dark: #1a6b2e;
+      --green-light: #e8f5ec;
+      --green-mid: #22823a;
+      --gray: #8e9298;
+      --dark: #1e3a2f;
+      --text: #2c3e50;
+      --text-light: #5a6a72;
+      --bg: #f8faf8;
+      --white: #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Lato', sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      overflow-x: hidden;
+    }
+
+    /* ─── HEXAGON BG ─── */
+    .hex-bg {
+      background-color: #f5f7f5;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='96'%3E%3Cpolygon fill='none' stroke='%23d0e8d5' stroke-width='1.5' points='42,3 81,24 81,72 42,93 3,72 3,24'/%3E%3C/svg%3E");
+      background-size: 56px 64px;
+    }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(8px);
+      border-bottom: 2px solid var(--green);
+      padding: 0 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 68px;
+      box-shadow: 0 2px 20px rgba(45,158,71,0.10);
+    }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo-wordmark {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 20px; font-weight: 900;
+      letter-spacing: -0.5px; line-height: 1;
+    }
+    .nav-logo-wordmark .spa { color: var(--green); }
+    .nav-logo-wordmark .implante { color: var(--gray); }
+    .nav-logo-sub {
+      font-size: 10px; color: var(--green); font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase; margin-top: 2px;
+    }
+    .nav-links {
+      display: flex; gap: 32px; list-style: none; align-items: center;
+    }
+    .nav-links a {
+      text-decoration: none; color: var(--text);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 0.5px; text-transform: uppercase;
+      position: relative; transition: color 0.2s;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 2px; background: var(--green);
+      transform: scaleX(0); transform-origin: center;
+      transition: transform 0.25s;
+    }
+    .nav-links a:hover { color: var(--green); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-cta {
+      background: var(--green) !important;
+      color: white !important;
+      padding: 10px 20px !important;
+      border-radius: 50px;
+      transition: background 0.2s !important;
+    }
+    .nav-cta::after { display: none !important; }
+    .nav-cta:hover { background: var(--green-mid) !important; }
+
+    /* hamburger */
+    .hamburger {
+      display: none; flex-direction: column;
+      gap: 5px; cursor: pointer; padding: 6px; background: none; border: none;
+    }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--dark); border-radius: 2px; transition: all 0.3s; }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 48px;
+      padding: 100px 5% 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    #hero::before {
+      content: '';
+      position: absolute; inset: 0; z-index: 0;
+      background-color: #f5f7f5;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='96'%3E%3Cpolygon fill='none' stroke='%23d0e8d5' stroke-width='1.5' points='42,3 81,24 81,72 42,93 3,72 3,24'/%3E%3C/svg%3E");
+      background-size: 60px 68px;
+    }
+    #hero::after {
+      content: '';
+      position: absolute; right: -80px; top: -80px; z-index: 0;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(45,158,71,0.13) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .hero-card { position: relative; z-index: 1; }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--green-light);
+      color: var(--green-dark);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 6px 16px; border-radius: 50px;
+      margin-bottom: 20px;
+    }
+    .hero-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(32px, 3.5vw, 56px);
+      font-weight: 900; line-height: 1.1;
+      color: var(--dark); margin-bottom: 14px;
+    }
+    .hero-title .highlight { color: var(--green); }
+    .hero-subtitle {
+      font-size: 16px; color: var(--text-light);
+      line-height: 1.7; margin-bottom: 32px; max-width: 440px;
+    }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+
+    .btn-primary {
+      background: var(--green); color: white;
+      padding: 14px 28px; border-radius: 50px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px; font-weight: 700;
+      text-decoration: none; letter-spacing: 0.5px;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(45,158,71,0.35);
+      white-space: nowrap;
+    }
+    .btn-primary:hover {
+      background: var(--green-mid);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(45,158,71,0.40);
+    }
+    .btn-outline {
+      color: var(--green); border: 2px solid var(--green);
+      padding: 12px 24px; border-radius: 50px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px; font-weight: 700;
+      text-decoration: none; letter-spacing: 0.5px;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap;
+    }
+    .btn-outline:hover { background: var(--green); color: white; }
+
+    /* hero card */
+    .hero-card-inner {
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 24px 80px rgba(45,158,71,0.16), 0 4px 20px rgba(0,0,0,0.06);
+      padding: 44px 36px;
+      text-align: center;
+    }
+    .card-logo-text {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(36px, 4vw, 56px);
+      font-weight: 900; letter-spacing: -2px; line-height: 1;
+    }
+    .card-logo-text .spa { color: var(--green); }
+    .card-logo-text .implante { color: var(--gray); }
+    .card-smile {
+      width: 160px; height: 28px; margin: 10px auto 14px; overflow: visible;
+    }
+    .card-tagline {
+      font-size: 14px; color: var(--green); font-weight: 700;
+      letter-spacing: 0.5px; margin-bottom: 28px;
+    }
+    .card-stats {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 0; border-top: 1px solid #e8f0ea; padding-top: 24px;
+    }
+    .stat { text-align: center; padding: 0 8px; }
+    .stat + .stat { border-left: 1px solid #e8f0ea; }
+    .stat-num {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 28px; font-weight: 900; color: var(--green);
+    }
+    .stat-label { font-size: 10px; color: var(--text-light); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+    /* ─── SECTIONS ─── */
+    section { padding: 80px 5%; }
+    .section-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--green); margin-bottom: 10px;
+    }
+    .section-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(26px, 3vw, 40px);
+      font-weight: 900; color: var(--dark);
+      line-height: 1.15; margin-bottom: 14px;
+    }
+    .section-desc {
+      font-size: 15px; color: var(--text-light);
+      max-width: 520px; line-height: 1.7;
+    }
+
+    /* ─── SERVICES ─── */
+    #servicos { background: white; }
+    .services-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 48px; gap: 24px; flex-wrap: wrap;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .service-card {
+      background: var(--bg);
+      border: 1.5px solid #e0ede4; border-radius: 16px;
+      padding: 24px 20px;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+      cursor: default;
+    }
+    .service-card:hover {
+      border-color: var(--green);
+      box-shadow: 0 8px 32px rgba(45,158,71,0.12);
+      transform: translateY(-4px);
+    }
+    .service-icon {
+      width: 42px; height: 42px;
+      background: var(--green-light); border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; margin-bottom: 14px;
+    }
+    .service-name {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px; font-weight: 800; color: var(--dark);
+      text-transform: uppercase; letter-spacing: 0.3px;
+    }
+    .service-desc {
+      font-size: 12px; color: var(--text-light);
+      margin-top: 5px; line-height: 1.5;
+    }
+    .service-card-more {
+      background: linear-gradient(135deg, var(--green), var(--green-mid));
+      border-color: transparent;
+    }
+    .service-card-more:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(45,158,71,0.30); }
+    .service-card-more .service-name { color: white; }
+    .service-card-more .service-desc { color: rgba(255,255,255,0.8); }
+    .service-card-more .service-icon { background: rgba(255,255,255,0.2); }
+
+    /* ─── DIFERENCIAIS ─── */
+    #diferenciais { background: var(--bg); }
+    .diff-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center;
+    }
+    .diff-items { display: flex; flex-direction: column; gap: 24px; }
+    .diff-item { display: flex; gap: 18px; align-items: flex-start; }
+    .diff-icon-wrap {
+      width: 50px; height: 50px; flex-shrink: 0;
+      background: var(--green-light); border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+    .diff-item h4 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px; font-weight: 800;
+      color: var(--dark); margin-bottom: 4px;
+    }
+    .diff-item p { font-size: 13px; color: var(--text-light); line-height: 1.6; }
+    .diff-visual {
+      background: white; border-radius: 24px;
+      box-shadow: 0 16px 60px rgba(45,158,71,0.12);
+      padding: 44px 36px; text-align: center;
+    }
+    .diff-tagline-small { font-size: 17px; color: var(--text-light); font-weight: 300; }
+    .diff-tagline-big { font-family: 'Montserrat', sans-serif; font-size: 50px; font-weight: 900; color: var(--green); line-height: 1; }
+    .diff-tagline-rest { font-size: 17px; color: var(--text-light); margin-top: 4px; }
+    .diff-divider { width: 50px; height: 3px; background: var(--green); border-radius: 2px; margin: 20px auto; }
+    .diff-cta-text { font-size: 14px; color: var(--text-light); line-height: 1.6; margin-bottom: 24px; }
+
+    /* ─── CONTATO ─── */
+    #contato { background: white; }
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 48px; align-items: start; margin-top: 48px;
+    }
+    .contact-grid-single { grid-template-columns: 1fr !important; }
+    .contact-info-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+    .contact-social-block { grid-column: 1 / -1; }
+    .contact-info { display: flex; flex-direction: column; gap: 16px; }
+    .contact-item {
+      display: flex; gap: 16px; align-items: flex-start;
+      background: var(--bg); border: 1.5px solid #e0ede4;
+      border-radius: 14px; padding: 18px 20px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .contact-item:hover { border-color: var(--green); box-shadow: 0 4px 20px rgba(45,158,71,0.10); }
+    .contact-item-icon {
+      width: 44px; height: 44px; flex-shrink: 0;
+      background: var(--green-light); border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    .contact-item h4 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px;
+      color: var(--text-light); margin-bottom: 4px;
+    }
+    .contact-item p { font-size: 15px; font-weight: 700; color: var(--dark); line-height: 1.5; }
+    .contact-item a { color: var(--green); text-decoration: none; }
+    .contact-item a:hover { text-decoration: underline; }
+
+    .whatsapp-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+    .whatsapp-btn {
+      background: #25d366; color: white;
+      padding: 13px 22px; border-radius: 50px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px; font-weight: 700;
+      text-decoration: none;
+      display: flex; align-items: center; gap: 10px;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(37,211,102,0.3);
+    }
+    .whatsapp-btn:hover {
+      background: #1fb855;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(37,211,102,0.40);
+    }
+    .whatsapp-icon { width: 20px; height: 20px; flex-shrink: 0; }
+
+    .contact-wa-section {
+      margin-top: 40px;
+      background: linear-gradient(135deg, var(--green), var(--green-mid));
+      border-radius: 20px;
+      padding: 36px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 24px; flex-wrap: wrap;
+    }
+    .contact-wa-section h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 22px; font-weight: 900;
+      color: white; margin-bottom: 6px;
+    }
+    .contact-wa-section p { font-size: 14px; color: rgba(255,255,255,0.85); }
+    .contact-wa-btns { display: flex; gap: 12px; flex-wrap: wrap; flex-shrink: 0; }
+    .whatsapp-btn-lg {
+      background: white;
+      color: var(--green-dark);
+      padding: 14px 24px; border-radius: 50px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px; font-weight: 800;
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 10px;
+      transition: transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      white-space: nowrap;
+    }
+    .whatsapp-btn-lg:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+    .whatsapp-btn-lg svg { width: 20px; height: 20px; fill: #25d366; flex-shrink: 0; }
+
+    /* ─── GOOGLE MAPS ─── */
+    #localizacao { background: var(--bg); }
+    .maps-grid {
+      display: grid; grid-template-columns: 1fr 2fr;
+      gap: 40px; align-items: start; margin-top: 48px;
+    }
+    .maps-info { display: flex; flex-direction: column; gap: 20px; }
+    .maps-info-card {
+      background: white; border: 1.5px solid #e0ede4;
+      border-radius: 16px; padding: 24px 20px;
+    }
+    .maps-info-card h4 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px;
+      color: var(--text-light); margin-bottom: 8px;
+    }
+    .maps-info-card p {
+      font-size: 15px; color: var(--dark);
+      font-weight: 700; line-height: 1.6;
+    }
+    .maps-info-card a {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--green); text-decoration: none;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px; font-weight: 700;
+      margin-top: 12px;
+    }
+    .maps-info-card a:hover { text-decoration: underline; }
+    .map-embed {
+      border-radius: 20px; overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.10);
+      height: 400px;
+    }
+    .map-embed iframe { width: 100%; height: 100%; border: none; display: block; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: linear-gradient(135deg, var(--green-dark) 0%, #0f4a1f 100%);
+      color: white; padding: 56px 5% 28px;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr;
+      gap: 48px; margin-bottom: 40px;
+    }
+    .footer-brand .logo-text {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 30px; font-weight: 900; letter-spacing: -1px;
+    }
+    .footer-brand .logo-text .spa { color: #6be88a; }
+    .footer-brand .logo-text .implante { color: rgba(255,255,255,0.50); }
+    .footer-brand p {
+      font-size: 14px; color: rgba(255,255,255,0.60);
+      margin-top: 12px; line-height: 1.7; max-width: 280px;
+    }
+    .footer-col h5 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: rgba(255,255,255,0.45); margin-bottom: 16px;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul li a {
+      color: rgba(255,255,255,0.70); text-decoration: none;
+      font-size: 14px; transition: color 0.2s;
+    }
+    .footer-col ul li a:hover { color: #6be88a; }
+    .footer-col p { color: rgba(255,255,255,0.70); font-size: 14px; line-height: 1.9; }
+    .footer-social { display: flex; gap: 12px; margin-top: 20px; }
+    .footer-social a {
+      width: 40px; height: 40px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, transform 0.15s;
+      text-decoration: none;
+    }
+    .footer-social a:hover { background: rgba(255,255,255,0.25); transform: translateY(-2px); }
+    .footer-social svg { width: 20px; height: 20px; fill: white; }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.12); padding-top: 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-bottom p { color: rgba(255,255,255,0.40); font-size: 13px; }
+
+    /* ─── FLOATING WHATSAPP ─── */
+    .float-wa {
+      position: fixed; bottom: 24px; right: 24px; z-index: 200;
+      width: 58px; height: 58px;
+      background: #25d366; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 6px 24px rgba(37,211,102,0.5);
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .float-wa:hover { transform: scale(1.1) translateY(-2px); box-shadow: 0 10px 32px rgba(37,211,102,0.6); }
+    .float-wa svg { width: 30px; height: 30px; fill: white; }
+    .float-wa-pulse {
+      position: absolute; inset: 0; border-radius: 50%;
+      background: rgba(37,211,102,0.4);
+      animation: pulse 2s ease-out infinite;
+    }
+    @keyframes pulse { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.8); opacity: 0; } }
+
+    /* ─── SCROLL ANIMATION ─── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.55s ease, transform 0.55s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1024px) {
+      .diff-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .footer-brand { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 768px) {
+      /* nav mobile */
+      .nav-links {
+        display: none; position: fixed;
+        top: 68px; left: 0; right: 0;
+        background: white; flex-direction: column;
+        padding: 16px 5%; gap: 0; align-items: stretch;
+        border-bottom: 2px solid var(--green);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li { border-bottom: 1px solid #eef4f0; }
+      .nav-links a { display: block; padding: 14px 0; font-size: 14px; }
+      .nav-cta { margin-top: 8px; text-align: center; padding: 12px 20px !important; }
+      .hamburger { display: flex; }
+
+      /* hero stacks */
+      #hero {
+        grid-template-columns: 1fr;
+        padding: 90px 5% 48px;
+        min-height: auto;
+        gap: 32px;
+      }
+      .hero-title { font-size: clamp(28px, 7vw, 40px); }
+      .hero-subtitle { font-size: 15px; max-width: 100%; }
+      .hero-card-inner { padding: 32px 24px; }
+      .card-logo-text { font-size: 36px; }
+
+      /* services */
+      .services-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+
+      /* contact */
+      .contact-grid { grid-template-columns: 1fr; }
+      .contact-info-row { grid-template-columns: 1fr; }
+      .contact-wa-section { flex-direction: column; align-items: flex-start; padding: 28px 24px; }
+      .contact-wa-btns { width: 100%; }
+      .whatsapp-btn-lg { flex: 1; justify-content: center; }
+
+      /* maps */
+      .maps-grid { grid-template-columns: 1fr; }
+      .map-embed { height: 300px; }
+
+      /* footer */
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-brand { grid-column: auto; }
+
+      section { padding: 60px 5%; }
+    }
+
+    @media (max-width: 480px) {
+      nav { padding: 0 4%; }
+      #hero { padding: 80px 4% 40px; }
+      section { padding: 50px 4%; }
+      .services-grid { grid-template-columns: 1fr 1fr; }
+      .hero-actions { flex-direction: column; align-items: stretch; }
+      .btn-primary, .btn-outline { justify-content: center; }
+      .stat-num { font-size: 22px; }
+      .diff-tagline-big { font-size: 40px; }
+    }
+    .card-features {
+      display: flex; flex-direction: column; gap: 10px;
+      text-align: left; margin-top: 4px;
+    }
+    .card-feature-item {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; color: var(--text); font-weight: 600;
+    }
+
+    /* ─── SERVICE ICON SVG ─── */
+    .service-icon svg { width: 22px; height: 22px; stroke: var(--green); }
+    .service-card-more .service-icon svg { stroke: white; }
+
+    /* ─── DIFF ICON SVG ─── */
+    .diff-icon-wrap svg { width: 24px; height: 24px; }
+
+    /* ─── DEPOIMENTOS ─── */
+    #depoimentos { background: var(--bg); }
+    .depoimentos-header { margin-bottom: 48px; }
+    .depoimentos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .depoimento-card {
+      background: white;
+      border: 1.5px solid #e0ede4;
+      border-radius: 20px;
+      padding: 28px 26px;
+      position: relative;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+    .depoimento-card:hover {
+      border-color: var(--green);
+      box-shadow: 0 8px 32px rgba(45,158,71,0.10);
+      transform: translateY(-3px);
+    }
+    .depoimento-quote {
+      position: absolute;
+      top: 20px; right: 24px;
+      font-size: 48px;
+      line-height: 1;
+      color: var(--green-light);
+      font-family: Georgia, serif;
+      font-weight: 900;
+      pointer-events: none;
+    }
+    .depoimento-stars {
+      display: flex; gap: 3px; margin-bottom: 14px;
+    }
+    .depoimento-stars svg { width: 16px; height: 16px; fill: #f59e0b; }
+    .depoimento-text {
+      font-size: 14px; color: var(--text);
+      line-height: 1.7; margin-bottom: 20px;
+      font-style: italic;
+    }
+    .depoimento-author {
+      display: flex; align-items: center; gap: 12px;
+      border-top: 1px solid #eef4f0; padding-top: 16px;
+    }
+    .depoimento-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--green-light);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px; font-weight: 800;
+      color: var(--green-dark); flex-shrink: 0;
+    }
+    .depoimento-name {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px; font-weight: 700; color: var(--dark);
+    }
+    .depoimento-source {
+      font-size: 11px; color: var(--text-light);
+      display: flex; align-items: center; gap: 4px; margin-top: 2px;
+    }
+    .depoimento-source svg { width: 12px; height: 12px; }
+    .google-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--green-light); color: var(--green-dark);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 50px;
+      margin-bottom: 20px;
+    }
+    .google-badge svg { width: 14px; height: 14px; }
+
+    @media (max-width: 768px) {
+      .depoimentos-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div>
+      <div class="nav-logo-wordmark"><span class="spa">SPA</span><span class="implante">IMPLANTE</span></div>
+      <div class="nav-logo-sub">Clínicas Odontológicas</div>
+    </div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#diferenciais">Diferenciais</a></li>
+    <li><a href="#depoimentos">Avaliações</a></li>
+    <li><a href="#localizacao">Localização</a></li>
+    <li><a href="#contato">Contato</a></li>
+    <li><a href="https://wa.me/5591981139877" class="nav-cta" target="_blank">Agendar Consulta</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-badge">✦ Clínica Odontológica em Belém do Pará</div>
+    <h1 class="hero-title">
+      Mudando<br>
+      <span class="highlight">Sorrisos,</span><br>
+      Transformando Vidas.
+    </h1>
+    <p class="hero-subtitle">
+      Cuidado odontológico completo com tecnologia moderna e atenção personalizada para cada sorriso.
+    </p>
+    <div class="hero-actions">
+      <a href="https://wa.me/5591981139877" class="btn-primary" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Agendar pelo WhatsApp
+      </a>
+      <a href="#servicos" class="btn-outline">Ver Serviços</a>
+    </div>
+  </div>
+
+  <div class="hero-card">
+    <div class="hero-card-inner">
+      <div class="card-logo-text"><span class="spa">SPA</span><span class="implante">IMPLANTE</span></div>
+      <svg class="card-smile" viewBox="0 0 160 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 8 6 Q 80 42 152 6" stroke="#2d9e47" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+      </svg>
+      <div class="card-tagline">Clínicas Odontológicas · Belém – PA</div>
+
+      <div class="card-features">
+        <div class="card-feature-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Implantes e Próteses</span>
+        </div>
+        <div class="card-feature-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Estética e Clareamento</span>
+        </div>
+        <div class="card-feature-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Ortodontia e Alinhadores</span>
+        </div>
+        <div class="card-feature-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Cirurgias e Tratamentos</span>
+        </div>
+        <div class="card-feature-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Atendimento Humanizado</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section id="servicos">
+  <div class="services-header">
+    <div>
+      <div class="section-label">O que oferecemos</div>
+      <h2 class="section-title">Nossos Serviços</h2>
+      <p class="section-desc">Tratamentos modernos e completos para cuidar do seu sorriso com excelência.</p>
+    </div>
+  </div>
+  <div class="services-grid">
+
+    <div class="service-card reveal">
+      <!-- Implante: parafuso rosqueado (titânio) -->
+      <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><path d="M9 4h6"/><path d="M8 7h8"/><path d="M9 10h6"/><path d="M10 13h4"/><path d="M10 16h4"/><path d="M11 19h2"/><circle cx="12" cy="3" r="1.2" fill="currentColor" stroke="none"/></svg></div>
+      <div class="service-name">Implante</div>
+      <div class="service-desc">Reposição de dentes com implantes de titânio de alta durabilidade.</div>
+    </div>
+
+    <div class="service-card reveal">
+      <!-- Prótese: dente real do SVGRepo -->
+      <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.198 4.458C8.554 4.223 7.944 4 7 4C5 4 4 6 4 8.5c0 1.598.409 2.584.834 3.609.24.578.485 1.17.666 1.891.149.596.21 1.458.273 2.375C5.924 18.536 6.096 21 7.5 21c.899 0 1.293-1.414 1.727-2.971C9.757 16.121 10.348 14 12 14s2.242 2.121 2.773 4.029C15.207 19.586 15.601 21 16.5 21c1.404 0 1.576-2.464 1.727-4.625.064-.917.124-1.779.273-2.375.18-.722.426-1.313.666-1.891C19.591 11.084 20 10.099 20 8.5 20 6 19 4 17 4c-.944 0-1.554.223-2.198.458C14.082 4.721 13.32 5 12 5c-1.32 0-2.082-.279-2.802-.542z"/></svg></div>
+      <div class="service-name">Prótese</div>
+      <div class="service-desc">Próteses fixas e removíveis com estética e função naturais.</div>
+    </div>
+
+    <div class="service-card reveal">
+      <!-- Clareamento: dente com raios de brilho -->
+      <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.198 4.458C8.554 4.223 7.944 4 7 4C5 4 4 6 4 8.5c0 1.598.409 2.584.834 3.609.24.578.485 1.17.666 1.891.149.596.21 1.458.273 2.375C5.924 18.536 6.096 21 7.5 21c.899 0 1.293-1.414 1.727-2.971C9.757 16.121 10.348 14 12 14s2.242 2.121 2.773 4.029C15.207 19.586 15.601 21 16.5 21c1.404 0 1.576-2.464 1.727-4.625.064-.917.124-1.779.273-2.375.18-.722.426-1.313.666-1.891C19.591 11.084 20 10.099 20 8.5 20 6 19 4 17 4c-.944 0-1.554.223-2.198.458C14.082 4.721 13.32 5 12 5c-1.32 0-2.082-.279-2.802-.542z"/><line x1="21" y1="3" x2="22.5" y2="1.5"/><line x1="22" y1="6" x2="24" y2="6"/><line x1="21" y1="9" x2="22.5" y2="10.5"/></svg></div>
+      <div class="service-name">Clareamento</div>
+      <div class="service-desc">Clareamento dental eficaz para um sorriso mais branco e radiante.</div>
+    </div>
+
+    <div class="service-card reveal">
+      <!-- Snap on Smile: arcada com dentes frontais e sorriso -->
+      <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8 Q12 4 21 8"/><path d="M3 8 Q3 16 12 17 Q21 16 21 8"/><line x1="7" y1="8.5" x2="7" y2="14"/><line x1="10" y1="7.5" x2="10" y2="14.5"/><line x1="14" y1="7.5" x2="14" y2="14.5"/><line x1="17" y1="8.5" x2="17" y2="14"/><path d="M3 8 Q12 11 21 8"/></svg></div>
+      <div class="service-name">Snap on Smile</div>
+      <div class="service-desc">Aparência perfeita sem procedimentos invasivos.</div>
+    </div>
+
+    <div class="service-card reveal">
+      <!-- Lentes de Contato dental: dente com camada/faceta na frente -->
+      <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.198 4.458C8.554 4.223 7.944 4 7 4C5 4 4 6 4 8.5c0 1.598.409 2.584.834 3.609.24.578.485 1.17.666 1.891.149.596.21 1.458.273 2.375C5.924 18.536 6.096 21 7.5 21c.899 0 1.293-1.414 1.727-2.971C9.757 16.121 10.348 14 12 14s2.242 2.121 2.773 4.029C15.207 19.586 15.601 21 16.5 21c1.404 0 1.576-2.464 1.727-4.625.064-.917.124-1.779.273-2.375.18-.722.426-1.313.666-1.891C19.591 11.084 20 10.099 20 8.5 20 6 19 4 17 4c-.944 0-1.554.223-2.198.458C14.082 4.721 13.32 5 12 5c-1.32 0-2.082-.279-2.802-.542z"/><path d="M9 4.2C9 4.2 9.5 8 12 8s3-3.8 3-3.8" stroke-width="1.8"/></svg></div>
+      <div class="service-name">Lentes de Contato</div>
+      <div class="service-desc">Facetas ultra-finas para transformar seu sorriso.</div>
+    </div>
+
+    <div class="service-card reveal">
+      <!-- Profilaxia: escova de dente -->
+      <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="2" width="4" height="8" rx="2"/><path d="M16 10v4"/><path d="M14 14h4"/><path d="M16 14v2a4 4 0 01-4 4H8"/><path d="M8 20a2 2 0 01-2-2v-1"/><path d="M6 17H4"/></svg></div>
+      <div class="service-name">Profilaxia</div>
+      <div class="service-desc">Limpeza profissional para saúde e prevenção bucal.</div>
+    </div>
+
+    <div class="service-card reveal">
+      <!-- Extração: dente sendo removido com seta -->
+      <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.198 4.458C8.554 4.223 7.944 4 7 4C5 4 4 6 4 8.5c0 1.598.409 2.584.834 3.609.24.578.485 1.17.666 1.891.149.596.21 1.458.273 2.375C5.924 18.536 6.096 21 7.5 21c.899 0 1.293-1.414 1.727-2.971C9.757 16.121 10.348 14 12 14s2.242 2.121 2.773 4.029C15.207 19.586 15.601 21 16.5 21c1.404 0 1.576-2.464 1.727-4.625.064-.917.124-1.779.273-2.375.18-.722.426-1.313.666-1.891C19.591 11.084 20 10.099 20 8.5 20 6 19 4 17 4c-.944 0-1.554.223-2.198.458C14.082 4.721 13.32 5 12 5c-1.32 0-2.082-.279-2.802-.542z"/><line x1="20" y1="3" x2="22" y2="1"/><line x1="22" y1="1" x2="22" y2="4"/><line x1="22" y1="1" x2="19" y2="1"/></svg></div>
+      <div class="service-name">Extração</div>
+      <div class="service-desc">Procedimento seguro com mínimo desconforto.</div>
+    </div>
+
+    <div class="service-card reveal">
+      <!-- Aparelho Dentário: braces do SVGRepo (simplificado em stroke) -->
+      <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="8" rx="3"/><line x1="7" y1="8" x2="7" y2="16"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="17" y1="8" x2="17" y2="16"/><line x1="2" y1="12" x2="22" y2="12"/><circle cx="7" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="17" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg></div>
+      <div class="service-name">Aparelho Dentário</div>
+      <div class="service-desc">Ortodontia metálica, estética e alinhadores transparentes.</div>
+    </div>
+
+    <div class="service-card reveal">
+      <!-- Restauração: dente com preenchimento hachurado -->
+      <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.198 4.458C8.554 4.223 7.944 4 7 4C5 4 4 6 4 8.5c0 1.598.409 2.584.834 3.609.24.578.485 1.17.666 1.891.149.596.21 1.458.273 2.375C5.924 18.536 6.096 21 7.5 21c.899 0 1.293-1.414 1.727-2.971C9.757 16.121 10.348 14 12 14s2.242 2.121 2.773 4.029C15.207 19.586 15.601 21 16.5 21c1.404 0 1.576-2.464 1.727-4.625.064-.917.124-1.779.273-2.375.18-.722.426-1.313.666-1.891C19.591 11.084 20 10.099 20 8.5 20 6 19 4 17 4c-.944 0-1.554.223-2.198.458C14.082 4.721 13.32 5 12 5c-1.32 0-2.082-.279-2.802-.542z"/><path d="M10 9h4v4h-4z" stroke-width="1.3"/></svg></div>
+      <div class="service-name">Restauração</div>
+      <div class="service-desc">Restaurações em resina com resultado natural e duradouro.</div>
+    </div>
+
+    <div class="service-card reveal">
+      <!-- Canal: dente com raízes visíveis -->
+      <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 3C7.5 3 6 5 6 7.5c0 1.5.4 2.5.8 3.5L8 14h8l1.2-3C17.6 10 18 9 18 7.5 18 5 16.5 3 14.5 3c-.8 0-1.4.2-2 .4C12 3.6 12 3.6 12 3.6c0 0 0-.1-.5-.3C11 3.2 10.3 3 9.5 3z"/><line x1="10" y1="14" x2="9" y2="21"/><line x1="14" y1="14" x2="15" y2="21"/><line x1="12" y1="14" x2="12" y2="21"/></svg></div>
+      <div class="service-name">Canal</div>
+      <div class="service-desc">Tratamento endodôntico para salvar seu dente com segurança.</div>
+    </div>
+
+    <div class="service-card reveal">
+      <!-- Cirurgias: bisturi cirúrgico -->
+      <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 3H5a1 1 0 00-1 1v1a1 1 0 001 1h14a1 1 0 001-1V4a1 1 0 00-1-1z"/><path d="M5 5l2 16h10l2-16"/><path d="M9 10h6M10 14h4"/></svg></div>
+      <div class="service-name">Cirurgias</div>
+      <div class="service-desc">Cirurgias orais realizadas por equipe especializada.</div>
+    </div>
+
+    <div class="service-card service-card-more reveal">
+      <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+      <div class="service-name">E Muito Mais</div>
+      <div class="service-desc">Entre em contato e conheça todos os tratamentos.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- DIFERENCIAIS -->
+<section id="diferenciais">
+  <div class="diff-grid">
+    <div>
+      <div class="section-label">Por que nos escolher</div>
+      <h2 class="section-title">Excelência em cada sorriso</h2>
+      <p class="section-desc" style="margin-bottom:36px;">Nossa equipe está pronta para oferecer o melhor cuidado bucal com tecnologia e acolhimento.</p>
+      <div class="diff-items">
+        <div class="diff-item reveal">
+          <div class="diff-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div><h4>Profissionais de Confiança</h4><p>Especialistas reconhecidos pelos próprios pacientes — atendimento que motiva a continuar o tratamento.</p></div>
+        </div>
+        <div class="diff-item reveal">
+          <div class="diff-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          <div><h4>Bons Materiais e Limpeza Rigorosa</h4><p>Equipamentos modernos, ambiente limpo e materiais de qualidade — como nossos pacientes relatam.</p></div>
+        </div>
+        <div class="diff-item reveal">
+          <div class="diff-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+          <div><h4>Recepção Acolhedora</h4><p>Recepcionistas educadas e solícitas — o acolhimento começa desde a chegada à clínica.</p></div>
+        </div>
+        <div class="diff-item reveal">
+          <div class="diff-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><h4>Localização Segura — Parque Office</h4><p>Dentro de um shopping, com toda a segurança e facilidade de acesso que você merece.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="diff-visual reveal">
+      <p class="diff-tagline-small">Mudando</p>
+      <p class="diff-tagline-big">Sorrisos</p>
+      <p class="diff-tagline-rest">transformando vidas.</p>
+      <div class="diff-divider"></div>
+      <p class="diff-cta-text">Agende sua avaliação e descubra o tratamento ideal para o seu sorriso.</p>
+      <a href="#contato" class="btn-primary" style="width:100%;justify-content:center;">
+        Ver formas de contato
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section id="depoimentos">
+  <div class="depoimentos-header">
+    <div class="section-label">O que dizem sobre nós</div>
+    <h2 class="section-title">Avaliações Reais</h2>
+    <p class="section-desc">Opiniões verdadeiras de pacientes da SPA Implante no Google.</p>
+  </div>
+
+  <div class="google-badge">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+    </svg>
+    Avaliações do Google
+  </div>
+
+  <div class="depoimentos-grid">
+
+    <div class="depoimento-card reveal">
+      <div class="depoimento-quote">"</div>
+      <div class="depoimento-stars">
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      </div>
+      <p class="depoimento-text">Grata pelo atendimento diferenciado! Atendimento e profissionais de qualidade! Clínica para recomendar para família e amigos.</p>
+      <div class="depoimento-author">
+        <div class="depoimento-avatar">K</div>
+        <div>
+          <div class="depoimento-name">Karen Monteiro</div>
+          <div class="depoimento-source">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Avaliação verificada no Google
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="depoimento-card reveal">
+      <div class="depoimento-quote">"</div>
+      <div class="depoimento-stars">
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      </div>
+      <p class="depoimento-text">Excelente, eu nunca tinha tido um atendimento como tive. Me motivou até a fazer o tratamento. Parabéns e obrigado ao odontólogo Felipe.</p>
+      <div class="depoimento-author">
+        <div class="depoimento-avatar">J</div>
+        <div>
+          <div class="depoimento-name">Junior Moraes</div>
+          <div class="depoimento-source">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Avaliação verificada no Google
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="depoimento-card reveal">
+      <div class="depoimento-quote">"</div>
+      <div class="depoimento-stars">
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      </div>
+      <p class="depoimento-text">O profissionalismo do Dr. Neto é excepcional! Profissional que eu tenho muita confiança. As recepcionistas são muito educadas e solícitas. Lá trabalham com limpeza, bons materiais, e fica bem localizada com a segurança de shopping.</p>
+      <div class="depoimento-author">
+        <div class="depoimento-avatar">A</div>
+        <div>
+          <div class="depoimento-name">Andrea Formigosa</div>
+          <div class="depoimento-source">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Local Guide · Avaliação verificada
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="depoimento-card reveal">
+      <div class="depoimento-quote">"</div>
+      <div class="depoimento-stars">
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      </div>
+      <p class="depoimento-text">Dr. Luiz Hermínio transformou o sorriso do meu marido. Resultado incrível, recomendo muito!</p>
+      <div class="depoimento-author">
+        <div class="depoimento-avatar">G</div>
+        <div>
+          <div class="depoimento-name">Gabriela Azevedo</div>
+          <div class="depoimento-source">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Avaliação verificada no Google · 7 meses atrás
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- LOCALIZAÇÃO -->
+<section id="localizacao">
+  <div class="section-label">Onde estamos</div>
+  <h2 class="section-title">Nossa Localização</h2>
+  <p class="section-desc">Fácil acesso no coração de Belém. Venha nos visitar!</p>
+  <div class="maps-grid">
+    <div class="maps-info">
+      <div class="maps-info-card reveal">
+        <h4>📍 Endereço</h4>
+        <p>Parque Office<br>1° Andar, Sala 105 Norte<br>Belém – Pará</p>
+        <a href="https://maps.google.com/?q=Parque+Office+Belem+Para" target="_blank">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+          Abrir no Google Maps
+        </a>
+      </div>
+      <div class="maps-info-card reveal">
+        <h4>🕐 Horários</h4>
+        <p>Seg – Sex: 8h às 18h<br>Sábado: 8h às 12h<br>Domingo: Fechado</p>
+      </div>
+      <div class="maps-info-card reveal">
+        <h4>📞 Contato Rápido</h4>
+        <p>(91) 98113-9877<br>(91) 98815-0364</p>
+        <a href="https://wa.me/5591981139877" target="_blank">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Chamar no WhatsApp
+        </a>
+      </div>
+    </div>
+    <div class="map-embed reveal">
+      <a href="https://maps.google.com/?q=Parque+Office+Belem+Para+Brasil" target="_blank" style="display:block;height:100%;text-decoration:none;position:relative;">
+        <img
+          src="https://maps.googleapis.com/maps/api/staticmap?center=Parque+Office,Belem,Para,Brasil&zoom=16&size=800x400&maptype=roadmap&markers=color:green%7CParque+Office,Belem,Para,Brasil&style=feature:poi%7Cvisibility:off"
+          alt="Mapa – Parque Office, Belém PA"
+          style="width:100%;height:100%;object-fit:cover;display:block;"
+          onerror="this.parentElement.innerHTML='<div style=\'width:100%;height:100%;background:linear-gradient(135deg,#e8f5ec,#d0e8d5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;\'><svg width=\'48\' height=\'48\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'#2d9e47\' stroke-width=\'1.5\'><path d=\'M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z\'/><circle cx=\'12\' cy=\'10\' r=\'3\'/></svg><div style=\'font-family:Montserrat,sans-serif;font-weight:800;color:#1a6b2e;font-size:15px;\'>Parque Office – 1° Andar, Sala 105 Norte</div><div style=\'font-size:13px;color:#5a6a72;\'>Belém – Pará</div><a href=\'https://maps.google.com/?q=Parque+Office+Belem+Para\' target=\'_blank\' style=\'background:#2d9e47;color:white;padding:12px 24px;border-radius:50px;font-family:Montserrat,sans-serif;font-weight:700;font-size:13px;text-decoration:none;\'>Abrir no Google Maps</a></div>'"
+        />
+        <div style="position:absolute;bottom:16px;right:16px;">
+          <a href="https://maps.google.com/?q=Parque+Office+Belem+Para+Brasil" target="_blank"
+            style="background:white;color:var(--green-dark);padding:10px 18px;border-radius:50px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:6px;box-shadow:0 4px 16px rgba(0,0,0,0.15);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Abrir no Google Maps
+          </a>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato">
+  <div class="section-label">Fale Conosco</div>
+  <h2 class="section-title">Entre em Contato</h2>
+  <p class="section-desc">Estamos prontos para atender você. Veja nossas informações e escolha o canal preferido.</p>
+
+  <div class="contact-info contact-info-row" style="margin-top:40px;">
+    <div class="contact-item reveal">
+      <div class="contact-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+      <div>
+        <h4>Endereço</h4>
+        <p>Parque Office – 1° Andar<br>Sala 105 Norte, Belém – PA</p>
+      </div>
+    </div>
+    <div class="contact-item reveal">
+      <div class="contact-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div>
+        <h4>Horário de Atendimento</h4>
+        <p>Seg – Sex: 8h às 18h<br>Sábado: 8h às 12h</p>
+      </div>
+    </div>
+    <div class="contact-item reveal">
+      <div class="contact-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 11a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.16 6.16l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+      <div>
+        <h4>Telefones</h4>
+        <p><a href="tel:+5591981139877">(91) 98113-9877</a><br><a href="tel:+5591988150364">(91) 98815-0364</a></p>
+      </div>
+    </div>
+    <div class="contact-item reveal">
+      <div class="contact-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div>
+      <div>
+        <h4>Redes Sociais</h4>
+        <p>
+          <a href="https://www.instagram.com/spaimplante/" target="_blank">@spaimplante</a> no Instagram<br>
+          <a href="https://www.threads.com/@spaimplante" target="_blank">@spaimplante</a> no Threads
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-wa-section reveal">
+    <div>
+      <h3>Agende pelo WhatsApp!</h3>
+      <p>Atendimento rápido e fácil. Clique e fale com a gente agora mesmo.</p>
+    </div>
+    <div class="contact-wa-btns">
+      <a href="https://wa.me/5591981139877" class="whatsapp-btn-lg" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        (91) 98113-9877
+      </a>
+      <a href="https://wa.me/5591988150364" class="whatsapp-btn-lg" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        (91) 98815-0364
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo-text"><span class="spa">SPA</span><span class="implante">IMPLANTE</span></div>
+      <p>Clínicas Odontológicas com excelência, tecnologia e cuidado humanizado. Transformando sorrisos em Belém do Pará.</p>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/spaimplante/" target="_blank" title="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="https://www.threads.com/@spaimplante" target="_blank" title="Threads">
+          <svg viewBox="0 0 24 24"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.028-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.291a13.853 13.853 0 012.588.188v-.731c0-.535-.04-1.071-.121-1.596-.228-1.514-1.11-2.311-2.624-2.37-1.296-.05-2.072.555-2.468 1.815l-1.943-.511c.556-1.977 2.054-3.088 4.416-2.995 2.24.085 3.62 1.317 3.961 3.468.1.659.15 1.338.15 2.024v.7c.005.033.01.066.015.1.584.327 1.079.732 1.476 1.217 1.065 1.315 1.365 3.103.818 5.072-1.023 3.766-4.14 5.607-9.271 5.607zM9.787 16.08c.68 0 1.283-.143 1.795-.427.762-.426 1.199-1.083 1.298-1.953.073-.64.06-1.29-.039-1.934a11.91 11.91 0 00-2.06-.188c-.96.055-1.747.315-2.275.753-.477.396-.706.925-.666 1.49.038.534.305.974.789 1.273.488.303 1.101.459 1.783.459l-.625-.473z"/></svg>
+        </a>
+        <a href="https://wa.me/5591981139877" target="_blank" title="WhatsApp">
+          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Serviços</h5>
+      <ul>
+        <li><a href="#servicos">Implante</a></li>
+        <li><a href="#servicos">Prótese</a></li>
+        <li><a href="#servicos">Clareamento</a></li>
+        <li><a href="#servicos">Lentes de Contato</a></li>
+        <li><a href="#servicos">Aparelho Dentário</a></li>
+        <li><a href="#servicos">Canal</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Contato</h5>
+      <p>Parque Office<br>1° Andar, Sala 105 Norte<br>Belém – Pará<br><br>(91) 98113-9877<br>(91) 98815-0364</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 SPA Implante Clínicas Odontológicas. Todos os direitos reservados.</p>
+    <p>Belém – Pará – Brasil</p>
+  </div>
+</footer>
+
+<!-- FLOATING WHATSAPP -->
+<a href="https://wa.me/5591981139877" class="float-wa" title="Falar no WhatsApp" target="_blank">
+  <div class="float-wa-pulse"></div>
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+  // Mobile menu
+  function toggleMenu() {
+    const nav = document.getElementById('navLinks');
+    nav.classList.toggle('open');
+  }
+  // Close menu on link click
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+  });
+
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Active nav highlight
+  const sections = document.querySelectorAll('section[id]');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 110) cur = s.id; });
+    document.querySelectorAll('.nav-links a[href^="#"]').forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--green)' : '';
+    });
+  });
+</script>
+</body>
+</html>
